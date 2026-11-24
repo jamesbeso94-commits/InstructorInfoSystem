@@ -1,0 +1,285 @@
+/* =========================================================
+   Information System - Simple UI
+   1. Base   2. Navbar + Sidebar   3. Buttons   4. Dashboard
+   5. Instructors table   6. Forms & detail pages   7. Login/Register
+   ========================================================= */
+
+/* ---------- 1. BASE ---------- */
+:root {
+    --brand: #2563eb;
+    --brand-dark: #1d4ed8;
+    --ink: #111827;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --bg: #f9fafb;
+    --white: #ffffff;
+    --view: #2563eb;
+    --edit: #059669;
+    --danger: #dc2626;
+
+    --bs-primary: #2563eb;
+    --bs-primary-rgb: 37, 99, 235;
+    --bs-link-color: #2563eb;
+    --bs-link-hover-color: #1d4ed8;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content { flex: 1; padding: 28px 16px 40px; }
+.page-title { font-weight: 700; font-size: 1.75rem; }
+
+.card, .dashboard-card, .instructor-card, .form-container {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: none;
+}
+
+.form-control { border: 1px solid #d1d5db; border-radius: 8px; padding: 9px 12px; }
+    .form-control:focus { border-color: var(--brand); box-shadow: 0 0 0 .2rem rgba(37, 99, 235, .15); }
+
+/* ---------- 2. NAVBAR ---------- */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: var(--white);
+    border-bottom: 1px solid var(--line);
+    padding: 12px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+}
+
+.site-brand { text-decoration: none; color: var(--ink); }
+.site-title { margin: 0; font-size: 18px; font-weight: 700; color: var(--ink); }
+
+.site-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+
+    .site-nav a {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 8px 12px;
+        border-radius: 8px;
+    }
+
+        .site-nav a:hover { background: #f3f4f6; color: var(--ink); }
+        .site-nav a.active { background: #eff6ff; color: var(--brand); font-weight: 600; }
+
+    .site-nav form { margin: 0 0 0 6px; }
+
+.nav-user { margin: 0 8px 0 12px; font-size: 14px; font-weight: 600; color: var(--ink); }
+
+.site-nav .nav-button {
+    background: var(--white);
+    color: var(--danger);
+    border: 1px solid #fca5a5;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+    .site-nav .nav-button:hover { background: #fef2f2; }
+
+.site-footer { text-align: center; padding: 16px; font-size: 13px; color: var(--muted); }
+
+/* ---------- 2b. SIDEBAR (logged-in pages) ---------- */
+.has-sidebar { flex-direction: row; }
+
+.sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 14px;
+    background: #1e293b;
+    color: #fff;
+}
+
+.sidebar-brand {
+    display: block;
+    padding: 6px 10px 18px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, .12);
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+    text-decoration: none;
+}
+    .sidebar-brand:hover { color: #fff; }
+
+.sidebar-nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+
+    .sidebar-nav a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        color: #cbd5e1;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+    }
+        .sidebar-nav a:hover { background: rgba(255, 255, 255, .08); color: #fff; }
+        .sidebar-nav a.active { background: var(--brand); color: #fff; font-weight: 600; }
+
+.sidebar-footer { padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, .12); }
+.sidebar-user { padding: 0 10px 10px; font-size: 14px; font-weight: 600; color: #fff; }
+
+.sidebar .nav-button {
+    width: 100%;
+    padding: 8px;
+    background: transparent;
+    color: #fca5a5;
+    border: 1px solid rgba(252, 165, 165, .5);
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+    .sidebar .nav-button:hover { background: rgba(220, 38, 38, .18); }
+
+.content-wrap { flex: 1; min-width: 0; display: flex; flex-direction: column; min-height: 100vh; }
+.has-sidebar .main-content { padding: 32px 36px 40px; }
+
+@media (max-width: 800px) {
+    .has-sidebar { flex-direction: column; }
+    .sidebar { width: auto; height: auto; position: static; }
+    .sidebar-nav { flex: none; flex-direction: row; flex-wrap: wrap; }
+    .sidebar-footer { margin-top: 12px; }
+    .has-sidebar .main-content { padding: 20px 14px; }
+}
+
+/* ---------- 3. BUTTONS ---------- */
+.btn { border-radius: 8px; font-weight: 600; box-shadow: none !important; }
+
+.btn-primary {
+    --bs-btn-bg: #2563eb; --bs-btn-border-color: #2563eb;
+    --bs-btn-hover-bg: #1d4ed8; --bs-btn-hover-border-color: #1d4ed8;
+    --bs-btn-active-bg: #1e40af; --bs-btn-active-border-color: #1e40af;
+}
+.btn-outline-primary {
+    --bs-btn-color: #2563eb; --bs-btn-border-color: #2563eb;
+    --bs-btn-hover-bg: #2563eb; --bs-btn-hover-border-color: #2563eb;
+}
+
+/* Details / Edit / Delete (small outlined buttons) */
+.btn-action {
+    display: inline-block;
+    padding: 5px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid;
+    border-radius: 6px;
+    background: var(--white);
+    text-decoration: none;
+}
+.btn-action-view { color: var(--view); border-color: #bfdbfe; }
+    .btn-action-view:hover { background: var(--view); border-color: var(--view); color: #fff; }
+.btn-action-edit { color: var(--edit); border-color: #a7f3d0; }
+    .btn-action-edit:hover { background: var(--edit); border-color: var(--edit); color: #fff; }
+.btn-action-delete { color: var(--danger); border-color: #fecaca; }
+    .btn-action-delete:hover { background: var(--danger); border-color: var(--danger); color: #fff; }
+
+/* Solid versions on Details / Edit / Delete pages */
+.btn-solid-edit { background: var(--edit); border-color: var(--edit); color: #fff; }
+    .btn-solid-edit:hover { background: #047857; border-color: #047857; color: #fff; }
+.btn-solid-delete { background: var(--danger); border-color: var(--danger); color: #fff; }
+    .btn-solid-delete:hover { background: #b91c1c; border-color: #b91c1c; color: #fff; }
+
+/* ---------- 4. DASHBOARD ---------- */
+.dashboard-hero { margin-bottom: 24px; }
+    .dashboard-hero h1 { font-weight: 700; }
+
+.dashboard-card:hover { border-color: var(--brand); }
+.stat-number { font-size: 2.75rem; font-weight: 700; color: var(--brand); line-height: 1; }
+
+.info-box { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; height: 100%; }
+
+/* ---------- 5. INSTRUCTORS TABLE ---------- */
+.search-box { position: relative; }
+    .search-box .bi-search { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+    .search-box .form-control { padding-left: 36px; }
+
+.instructor-card { overflow-x: auto; }
+.instructor-table { margin: 0; }
+    .instructor-table thead th {
+        background: var(--bg);
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+    }
+        .instructor-table thead th a { color: inherit; text-decoration: none; }
+    .instructor-table tbody td { padding: 14px 18px; vertical-align: middle; border-bottom: 1px solid #f3f4f6; }
+    .instructor-table tbody tr:hover { background: var(--bg); }
+    .instructor-table tbody tr:last-child td { border-bottom: 0; }
+
+.id-chip { color: var(--muted); font-size: 13px; font-weight: 600; }
+.email-link { color: var(--muted); text-decoration: none; }
+    .email-link:hover { color: var(--brand); text-decoration: underline; }
+
+.pagination .page-link { color: var(--brand); border: 1px solid var(--line); border-radius: 6px; margin: 0 2px; }
+.pagination .page-item.active .page-link { background: var(--brand); border-color: var(--brand); color: #fff; }
+
+/* ---------- 6. FORMS & DETAIL PAGES ---------- */
+.form-card-header { background: var(--white); color: var(--ink); padding: 18px 24px; border-bottom: 1px solid var(--line); }
+    .form-card-header.danger { color: var(--danger); }
+
+.detail-row { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid #f3f4f6; }
+    .detail-row .label { color: var(--muted); font-size: 13px; font-weight: 600; }
+    .detail-row .value { font-weight: 600; text-align: right; word-break: break-all; }
+
+/* ---------- 7. LOGIN / REGISTER ---------- */
+.form-container { width: 100%; max-width: 420px; padding: 32px; margin: 24px auto; }
+    .form-container h2 { margin: 0 0 20px; text-align: center; font-weight: 700; font-size: 1.6rem; }
+    .form-container .btn-primary {
+        width: 100%; padding: 10px; background: var(--brand); color: #fff;
+        border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer;
+    }
+        .form-container .btn-primary:hover { background: var(--brand-dark); }
+
+.form-group { margin-bottom: 16px; }
+    .form-group label { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 600; color: #374151; }
+
+.form-input { width: 100%; padding: 9px 12px; box-sizing: border-box; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; }
+    .form-input:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 .2rem rgba(37, 99, 235, .15); }
+
+.field-error, .validation-summary { color: var(--danger); font-size: 12px; }
+.js-message { font-size: 13px; color: var(--danger); min-height: 16px; }
+.success-message { background: #d1fae5; color: #047857; padding: 8px 12px; border-radius: 8px; font-size: 13px; }
+.btn-link { background: none; border: none; color: var(--brand); font-size: 12px; cursor: pointer; padding: 4px 0; text-decoration: underline; }
+
+@media (max-width: 700px) {
+    .site-header { flex-direction: column; align-items: flex-start; padding: 12px 16px; }
+}
+
+
+/* ---------- Instructors table (wide, 9 fields + actions) ---------- */
+.instructor-table { font-size: 13.5px; }
+    .instructor-table thead th, .instructor-table tbody td { padding: 12px 14px; }
+    .instructor-table tbody td { white-space: nowrap; }
+    .instructor-table tbody td.cell-wrap { white-space: normal; min-width: 180px; }
+
+.btn-action-compose { color: #7c3aed; border-color: #ddd6fe; }
+    .btn-action-compose:hover { background: #7c3aed; border-color: #7c3aed; color: #fff; }

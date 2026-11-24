@@ -1,0 +1,218 @@
+@model IEnumerable<InstructorInfoSystem.Models.Instructor>
+
+@{
+    ViewData["Title"] = "Instructors";
+}
+
+<div class="container-fluid px-4 px-md-5 mt-4">
+
+    <form asp-action="Index" method="get" class="mb-4">
+        <div class="row g-2 align-items-center">
+            <div class="col-12 col-md-8 col-lg-6 search-box">
+                <i class="bi bi-search"></i>
+                <input type="text"
+                       name="searchString"
+                       value="@ViewData["CurrentFilter"]"
+                       class="form-control"
+                       placeholder="Search by name, designation, majorship, degree, address, or e-mail..." />
+            </div>
+
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search"></i> Search
+                </button>
+            </div>
+
+            <div class="col-auto">
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-lg"></i> Clear
+                </a>
+            </div>
+        </div>
+    </form>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+            @TempData["Message"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+        </div>
+    }
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+
+            <h1 class="page-title d-flex align-items-center gap-2">
+                Instructors
+                <span class="badge bg-primary rounded-pill fs-6">
+                    @ViewData["TotalCount"]
+                </span>
+            </h1>
+
+            <p class="text-muted mb-0">
+                Showing <strong>@Model.Count()</strong>
+                of <strong>@ViewData["TotalCount"]</strong>
+                matching instructors
+            </p>
+
+        </div>
+        <a asp-action="Create" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Instructor</a>
+    </div>
+
+    <div class="instructor-card table-responsive">
+        <table class="table instructor-table align-middle">
+            @{
+                var currentSort = ViewData["CurrentSort"]?.ToString();
+                var currentFilter = ViewData["CurrentFilter"]?.ToString();
+
+                string NextSort(string column)
+                {
+                    return currentSort == column
+                        ? column + "_desc"
+                        : column;
+                }
+            }
+
+            <thead>
+                <tr>
+                    <th>
+                        <a asp-action="Index"
+                           asp-route-searchString="@currentFilter"
+                           asp-route-sortOrder="@NextSort("fullName")">
+                            Full Name
+                            @if (currentSort == "fullName") { <span>&uarr;</span> }
+                            else if (currentSort == "fullName_desc") { <span>&darr;</span> }
+                        </a>
+                    </th>
+                    <th>Age</th>
+                    <th>Address</th>
+                    <th>
+                        <a asp-action="Index"
+                           asp-route-searchString="@currentFilter"
+                           asp-route-sortOrder="@NextSort("designation")">
+                            Designation
+                            @if (currentSort == "designation") { <span>&uarr;</span> }
+                            else if (currentSort == "designation_desc") { <span>&darr;</span> }
+                        </a>
+                    </th>
+                    <th>Gender</th>
+                    <th>Contact Number</th>
+                    <th>Majorship</th>
+                    <th>Bachelor Degree</th>
+                    <th>
+                        <a asp-action="Index"
+                           asp-route-searchString="@currentFilter"
+                           asp-route-sortOrder="@NextSort("email")">
+                            E-mail Address
+                            @if (currentSort == "email") { <span>&uarr;</span> }
+                            else if (currentSort == "email_desc") { <span>&darr;</span> }
+                        </a>
+                    </th>
+                    <th class="text-center" style="min-width: 330px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    @foreach (var instructor in Model)
+                    {
+
+                        <tr>
+                            <td class="fw-semibold">@instructor.FullName</td>
+                            <td>@instructor.Age</td>
+                            <td class="cell-wrap">@instructor.Address</td>
+                            <td>@instructor.Designation</td>
+                            <td>@instructor.Gender</td>
+                            <td>@instructor.ContactNumber</td>
+                            <td>@instructor.Majorship</td>
+                            <td class="cell-wrap">@instructor.BachelorDegree</td>
+                            <td>
+                                <a href="mailto:@instructor.Email" class="email-link">@instructor.Email</a>
+                            </td>
+                            <td class="text-center text-nowrap">
+                                <a href="mailto:@instructor.Email"
+                                   class="btn-action btn-action-compose">
+                                    <i class="bi bi-envelope"></i> Compose
+                                </a>
+
+                                <a asp-action="Details"
+                                   asp-route-id="@instructor.InstructorId"
+                                   class="btn-action btn-action-view">
+                                    <i class="bi bi-eye"></i> Details
+                                </a>
+
+                                <a asp-action="Edit"
+                                   asp-route-id="@instructor.InstructorId"
+                                   class="btn-action btn-action-edit">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+
+                                <a asp-action="Delete"
+                                   asp-route-id="@instructor.InstructorId"
+                                   class="btn-action btn-action-delete">
+                                    <i class="bi bi-trash3"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="10" class="text-center text-muted py-4">
+                            <i class="bi bi-inbox fs-3 d-block mb-2"></i>No instructors found. Add an instructor to get started.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@{
+    var currentPage = (int)(ViewData["CurrentPage"] ?? 1);
+    var totalPages = (int)(ViewData["TotalPages"] ?? 0);
+}   
+@if (totalPages > 1)
+{
+    <nav aria-label="Instructor pages" class="mt-4">
+        <ul class="pagination justify-content-center mt-4">
+            <li class="page-item @(currentPage <= 1 ? "disabled" : "")">
+                <a class="page-link"    
+                   asp-action="Index"
+                   asp-route-searchString="@currentFilter"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-page="@(currentPage - 1)">
+                    Previous
+                </a>
+            </li>
+
+            @for (var p = 1; p <= totalPages; p++)
+            {
+                <li class="page-item @(p == currentPage ? "active" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-searchString="@currentFilter"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-page="@p">
+                        @p
+                    </a>
+                </li>
+            }
+
+            <li class="page-item @(currentPage >= totalPages ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-searchString="@currentFilter"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-page="@(currentPage + 1)">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </nav>
+}
